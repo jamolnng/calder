@@ -11,3 +11,8 @@ repository = "https://github.com/jamolnng/calder"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+rocket = "0.5.0-rc.1"
+tera = "1.15.0"
+pulldown-cmark = "0.9.1"
+lazy_static = "1.4.0"
+glob = "0.3.0"
