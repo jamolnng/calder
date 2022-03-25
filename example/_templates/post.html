@@ -1,9 +1,0 @@
-{%- extends "_templates/base.html" -%}
-{%- block title -%}{{ self.title }}{%- endblock title -%}
-{%- block head -%}{{ super() }}{%- endblock head -%}
-{%- block content -%}
-Post
-{%- if self.data -%}
-{{- self.data -}}
-{%- endif -%}
-{%- endblock content -%}
