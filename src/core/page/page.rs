@@ -25,6 +25,22 @@ pub struct PageError;
 pub type Result<T> = std::result::Result<T, PageError>;
 
 impl Page {
+  pub fn has_tag(&self, tag: &str) -> bool {
+    self.tags.contains(&tag.to_string())
+  }
+
+  pub fn template(&self) -> &String {
+    &self.template
+  }
+
+  pub fn set_path(&mut self, path: &PathBuf) {
+    self.path = path.clone();
+  }
+
+  pub fn set_data(&mut self, data: String) {
+    self.data = data;
+  }
+
   pub fn render(
     &mut self, pages: &Vec<Self>, tera: &tera::Tera,
   ) -> Result<()> {
@@ -35,7 +51,7 @@ impl Page {
 
   pub fn write(&self, path: &PathBuf) -> Result<()> {
     let path = path.join(&self.path).with_extension("html");
-    println!("{}", path.display());
+    print!("{}", path.display());
     let parent = match path.parent() {
       Some(p) => Ok(p),
       None => Err(PageError {}),
@@ -46,7 +62,7 @@ impl Page {
     }?;
     match std::fs::write(path, &self.data) {
       Ok(_) => {
-        println!("ok");
+        println!(" ok");
         Ok(())
       }
       Err(e) => {
