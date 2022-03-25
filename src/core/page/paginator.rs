@@ -115,7 +115,7 @@ impl Paginator {
               if first && second {
                 let page = serde_yaml::from_str::<Page>(&page_str);
                 if let Ok(mut page) = page {
-                  page.set_path(&file.with_extension(".html"));
+                  page.set_path(&file.with_extension("html"));
                   page.set_data(Self::render_markdown(&data));
                   r.push(page);
                 }
