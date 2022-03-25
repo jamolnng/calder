@@ -1,16 +1,29 @@
 use glob::glob;
 use pulldown_cmark::{html, Options, Parser};
+use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use tera::Tera;
 
+#[derive(Debug, Serialize, Deserialize)]
+struct Page {
+  title: Option<String>,
+  date: Option<String>,
+  desc: Option<String>,
+  template: Option<String>,
+  tags: Option<Vec<String>>,
+}
+
 pub fn build(base: &PathBuf) -> std::result::Result<(), ()> {
-  let tera = match Tera::new(format!("{}/templates/**/*.html", base.display()).as_str()) {
+  let mut tera = match Tera::new(
+    format!("{}/_templates/**/*.html", base.display()).as_str(),
+  ) {
     Ok(t) => t,
     Err(e) => {
       println!("Parsing error(s): {}", e);
       return Err(());
     }
   };
+  tera.autoescape_on(vec![]);
   let options = Options::all();
   let files = glob(format!("{}/**/*.md", base.display()).as_str()).ok();
   if let Some(files) = files {
@@ -44,14 +57,7 @@ fn render_markdown(file: &PathBuf, options: &Options) -> Result<String, ()> {
 
 fn write_processed(base: &PathBuf, file: &PathBuf, processed: &String) {
   let mut outfile = PathBuf::from(file.strip_prefix(base).unwrap());
-  let outfile_string = outfile.to_string_lossy();
-  if outfile_string.starts_with("_") {
-    let start = outfile.iter().next().unwrap().to_string_lossy();
-    let t = start.trim_start_matches('_');
-    let pb = PathBuf::from(outfile.strip_prefix(start.to_string()).unwrap());
-    outfile = PathBuf::from(t).join(pb);
-  }
-  let outfile = PathBuf::from("output/").join(outfile).with_extension("html");
+  outfile = PathBuf::from("output/").join(outfile).with_extension("html");
   print!("{} ", outfile.to_string_lossy());
   std::fs::create_dir_all(outfile.parent().unwrap()).unwrap();
   std::fs::write(outfile, processed).unwrap();
@@ -61,7 +67,7 @@ fn write_processed(base: &PathBuf, file: &PathBuf, processed: &String) {
 fn process_file(
   tera: &Tera, file: &PathBuf, options: &Options,
 ) -> Result<String, ()> {
-  print!("Building: {}... ", file.to_string_lossy());
+  print!("Building: {}... ", file.display());
   let dir = file.parent().unwrap().file_name().unwrap();
 
   let html = render_markdown(file, options).unwrap();
@@ -79,6 +85,9 @@ fn process_file(
   let result = tera.render(&template_name, &context);
   match result {
     Ok(s) => Ok(s),
-    Err(_) => Err(()),
+    Err(e) => {
+      println!("{e}");
+      Err(())
+    }
   }
 }
