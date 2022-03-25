@@ -1,9 +1,12 @@
 use glob::glob;
 use std::path::PathBuf;
 
-pub fn copy(input: &PathBuf, output: &PathBuf) -> Result<(), glob::PatternError> {
-  let files = glob(format!("{}/[!_]*/**/*[!.html][!.md]", input.display()).as_str())?
-    .chain(glob(format!("{}/*[!.html][!.md]", input.display()).as_str())?);
+pub fn copy(
+  input: &PathBuf, output: &PathBuf,
+) -> Result<(), glob::PatternError> {
+  let files =
+    glob(format!("{}/[!_]*/**/*[!.html][!.md]", input.display()).as_str())?
+      .chain(glob(format!("{}/*[!.html][!.md]", input.display()).as_str())?);
   for file in files {
     match file {
       Ok(file) => {
