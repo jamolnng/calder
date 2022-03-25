@@ -38,7 +38,7 @@ impl Paginator {
   pub fn with_tag_from<'a>(pages: &'a Vec<Page>, tag: &str) -> Vec<&'a Page> {
     let mut r = Vec::new();
     for page in pages {
-      if page.tags.contains(&tag.to_string()) {
+      if page.has_tag(tag) {
         r.push(page);
       }
     }
@@ -54,7 +54,7 @@ impl Paginator {
   ) -> Vec<&'a Page> {
     let mut r = Vec::new();
     for page in pages {
-      if page.template == template {
+      if page.template() == template {
         r.push(page);
       }
     }
@@ -114,8 +114,8 @@ impl Paginator {
               if first && second {
                 let page = serde_yaml::from_str::<Page>(&page_str);
                 if let Ok(mut page) = page {
-                  page.path = file;
-                  page.data = data;
+                  page.set_path(path);
+                  page.set_data(data);
                   r.push(page);
                 } else {
                   println!("{}, {:#?}", file.display(), page_str);
