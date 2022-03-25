@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 
 <head>
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
@@ -8,29 +8,34 @@
   <link rel="stylesheet"
         href="/assets/main.css">
   <script src="/assets/main.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
   {%- block head %}
   <title>{%- block title -%}{%- endblock title -%}</title>
+  <meta name="description"
+        content="{{ self.desc }}">
   {%- endblock head %}
 </head>
 
 <body>
-  <div id="themetoggle">
-    <label class="switch">
-      <input id="themetoggle-checkbox"
-             type="checkbox"
-             onclick="theme_slider(this);">
-      <span class="slider round"></span>
-    </label>
-  </div>
-  <div class="center">
-    <div id="content">
-      {% block content -%}
-      {%- endblock content %}
+  <div id="main_wrapper">
+    <div id="themetoggle">
+      <label class="switch">
+        <input id="themetoggle-checkbox"
+               type="checkbox"
+               onclick="theme_slider(this);">
+        <span class="slider round"></span>
+      </label>
     </div>
-    <div id="footer">
-      {% block footer -%}
-      {%- endblock footer %}
+    <div class="">
+      <div id="content">
+        {% block content -%}
+        {%- endblock content %}
+      </div>
+      <div id="footer">
+        {% block footer -%}
+        {%- endblock footer %}
+      </div>
     </div>
   </div>
 </body>
