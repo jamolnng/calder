@@ -1,48 +1,43 @@
-use glob::glob;
+#![allow(dead_code)]
+
+use crate::core::page::Paginator;
+
 use pulldown_cmark::{html, Options, Parser};
-use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use tera::Tera;
 
-#[derive(Debug, Serialize, Deserialize)]
-struct Page {
-  title: Option<String>,
-  date: Option<String>,
-  desc: Option<String>,
-  template: Option<String>,
-  tags: Option<Vec<String>>,
-}
-
 pub fn build(base: &PathBuf) -> std::result::Result<(), ()> {
-  let mut tera = match Tera::new(
-    format!("{}/_templates/**/*.html", base.display()).as_str(),
-  ) {
-    Ok(t) => t,
-    Err(e) => {
-      println!("Parsing error(s): {}", e);
-      return Err(());
-    }
-  };
-  tera.autoescape_on(vec![]);
-  let options = Options::all();
-  let files = glob(format!("{}/**/*.md", base.display()).as_str()).ok();
-  if let Some(files) = files {
-    for file in files {
-      match file {
-        Ok(file) => {
-          if file.is_file() {
-            let processed = process_file(&tera, &file, &options);
-            match processed {
-              Ok(s) => write_processed(base, &file, &s),
-              Err(_) => {}
-            }
-          }
-        }
-        Err(e) => println!("{e}"),
-      }
-    }
-  }
-  Ok(())
+  println!("{:#?}", Paginator::from(base).get_type("post"));
+  return Ok(());
+  // let mut tera = match Tera::new(
+  //   format!("{}/_templates/**/*.html", base.display()).as_str(),
+  // ) {
+  //   Ok(t) => t,
+  //   Err(e) => {
+  //     println!("Parsing error(s): {}", e);
+  //     return Err(());
+  //   }
+  // };
+  // tera.autoescape_on(vec![]);
+  // let options = Options::all();
+  // let files = glob(format!("{}/**/*.md", base.display()).as_str()).ok();
+  // if let Some(files) = files {
+  //   for file in files {
+  //     match file {
+  //       Ok(file) => {
+  //         if file.is_file() {
+  //           let processed = process_file(&tera, &file, &options);
+  //           match processed {
+  //             Ok(s) => write_processed(base, &file, &s),
+  //             Err(_) => {}
+  //           }
+  //         }
+  //       }
+  //       Err(e) => println!("{e}"),
+  //     }
+  //   }
+  // }
+  // Ok(())
 }
 
 fn render_markdown(file: &PathBuf, options: &Options) -> Result<String, ()> {

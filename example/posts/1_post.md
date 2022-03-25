@@ -2,8 +2,8 @@
 title: asdf
 date: 24-03-2022
 desc: asdf things
-template: post
-tags: asdf, things, stuff
+type: post
+tags: [asdf, things, stuff]
 ---
 
 # My first post

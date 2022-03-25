@@ -33,11 +33,11 @@ fn main() {
       Err(_) => println!("=====\tErr...\t\t====="),
     }
   }
-  println!("=====\tCopying...\t=====");
-  match core::copy::copy(&path) {
-    Ok(_) => println!("=====\tOk...\t\t====="),
-    Err(_) => println!("=====\tErr...\t\t====="),
-  }
+  // println!("=====\tCopying...\t=====");
+  // match core::copy::copy(&path) {
+  //   Ok(_) => println!("=====\tOk...\t\t====="),
+  //   Err(_) => println!("=====\tErr...\t\t====="),
+  // }
   if minify {
     println!("=====\tMinifying...\t=====");
     match core::minifyer::minify() {
