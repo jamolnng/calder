@@ -3,7 +3,7 @@
 {%- block head -%}{{ super() }}{%- endblock head -%}
 {%- block content -%}
 Post
-{%- if rendered -%}
-{{- rendered -}}
+{%- if data -%}
+{{- data -}}
 {%- endif -%}
 {%- endblock content -%}

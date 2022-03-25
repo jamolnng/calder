@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use glob::glob;
 use std::path::PathBuf;
 
@@ -25,6 +27,10 @@ impl Paginator {
     }
   }
 
+  pub fn pages(&self) -> &Vec<Page> {
+    &self.pages
+  }
+
   pub fn with_tag(&self, tag: &str) -> Vec<&Page> {
     Self::with_tag_from(&self.pages, tag)
   }
@@ -43,7 +49,9 @@ impl Paginator {
     Self::get_type_from(&self.pages, t)
   }
 
-  pub fn get_type_from<'a>(pages: &'a Vec<Page>, template: &str) -> Vec<&'a Page> {
+  pub fn get_type_from<'a>(
+    pages: &'a Vec<Page>, template: &str,
+  ) -> Vec<&'a Page> {
     let mut r = Vec::new();
     for page in pages {
       if page.template == template {
@@ -51,6 +59,27 @@ impl Paginator {
       }
     }
     r
+  }
+
+  pub fn render(&mut self, tera: &tera::Tera) -> Result<()> {
+    let pages = self.pages.clone();
+    for page in &mut self.pages {
+      match page.render(&pages, tera) {
+        Ok(_) => {}
+        Err(_) => {}
+      }
+    }
+    Ok(())
+  }
+
+  pub fn write(&self, path: &PathBuf) -> Result<()> {
+    for page in &self.pages {
+      match page.write(path) {
+        Ok(_) => {}
+        Err(_) => {}
+      }
+    }
+    Ok(())
   }
 
   fn get_pages(path: &PathBuf) -> Result<Vec<Page>> {
@@ -63,14 +92,16 @@ impl Paginator {
               let mut first = false;
               let mut second = false;
               let mut page_str = String::new();
+              let mut data = String::new();
               for line in lines {
                 if let Ok(line) = line {
-                  if line == "---" {
+                  if first && second {
+                    data.push_str(&format!("{line}\n"));
+                  } else if line == "---" {
                     if !first {
                       first = true;
                     } else {
                       second = true;
-                      break;
                     }
                   } else if line.is_empty() && !first {
                     break; // TODO: error
@@ -79,18 +110,25 @@ impl Paginator {
                   }
                 }
               }
+              let file = PathBuf::from(file.strip_prefix(path).unwrap());
               if first && second {
                 let page = serde_yaml::from_str::<Page>(&page_str);
                 if let Ok(mut page) = page {
                   page.path = file;
+                  page.data = data;
                   r.push(page);
                 } else {
-                  println!("{:#?}", page);
+                  println!("{}, {:#?}", file.display(), page_str);
                   // TODO: error
                 }
               } else if !first && !second {
                 let title = Self::pretty_unknown_title(&file);
-                r.push(Page { title: title, path: file, ..Page::default() })
+                r.push(Page {
+                  title: title,
+                  path: file,
+                  data: data,
+                  ..Page::default()
+                })
               }
             } else {
               // TODO: error

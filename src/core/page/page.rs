@@ -1,13 +1,14 @@
+use pulldown_cmark::{html, Options, Parser};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(default)]
 pub struct Page {
   pub title: String,
   pub date: String,
   pub desc: String,
-  #[serde(rename = "type")] 
+  #[serde(rename = "type")]
   pub template: String,
   pub tags: Vec<String>,
   #[serde(skip_deserializing)]
@@ -15,7 +16,7 @@ pub struct Page {
   #[serde(skip_serializing, skip_deserializing)]
   pub path: PathBuf,
   #[serde(skip_serializing, skip_deserializing)]
-  pub html: String,
+  pub data: String,
 }
 
 #[derive(Debug, Clone)]
@@ -24,12 +25,68 @@ pub struct PageError;
 pub type Result<T> = std::result::Result<T, PageError>;
 
 impl Page {
-  fn render(&self) -> Result<()> {
+  pub fn render(
+    &mut self, pages: &Vec<Self>, tera: &tera::Tera,
+  ) -> Result<()> {
+    self.render_markdown();
+    self.render_tera(pages, tera)?;
     Ok(())
   }
 
-  fn write(&self, path: &PathBuf) -> Result<()> {
-    Ok(())
+  pub fn write(&self, path: &PathBuf) -> Result<()> {
+    let path = path.join(&self.path).with_extension("html");
+    println!("{}", path.display());
+    let parent = match path.parent() {
+      Some(p) => Ok(p),
+      None => Err(PageError {}),
+    }?;
+    match std::fs::create_dir_all(parent) {
+      Ok(_) => Ok(()),
+      Err(_) => Err(PageError {}),
+    }?;
+    match std::fs::write(path, &self.data) {
+      Ok(_) => {
+        println!("ok");
+        Ok(())
+      }
+      Err(e) => {
+        println!("{e}");
+        Err(PageError {})
+      }
+    }
+  }
+
+  fn render_markdown(&mut self) {
+    let options = Options::all();
+    let parser = Parser::new_ext(&self.data, options);
+    let mut html = String::with_capacity(self.data.len());
+    html::push_html(&mut html, parser);
+  }
+
+  fn render_tera(
+    &mut self, pages: &Vec<Self>, tera: &tera::Tera,
+  ) -> Result<()> {
+    let mut context = tera::Context::new();
+    context.insert("pages", &pages);
+    context.insert(
+      "posts",
+      &crate::core::page::Paginator::get_type_from(pages, "post"),
+    );
+    context.insert("data", &self.data);
+
+    let mut template = format!("{}.html", self.template);
+    if tera.get_template_names().find(|s| *s == template).is_none() {
+      template = "default.html".to_string();
+    }
+
+    let result = tera.render(&template, &context);
+    match result {
+      Ok(s) => {
+        self.data = s;
+        Ok(())
+      }
+      Err(_) => Err(PageError {}),
+    }
   }
 }
 
@@ -43,7 +100,7 @@ impl Default for Page {
       build_date: chrono::Utc::now().format("%Y-%m-%d").to_string(),
       tags: Vec::new(),
       path: PathBuf::new(),
-      html: String::new(),
+      data: String::new(),
     }
   }
 }
