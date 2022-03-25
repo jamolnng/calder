@@ -1,3 +1,7 @@
+hljs.highlightAll();
+
+hljs.initLineNumbersOnLoad();
+
 const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
 
 window.onload = function () {
@@ -11,7 +15,7 @@ window.onload = function () {
   } else {
     load_theme(theme);
   }
-}
+};
 
 function theme_slider(slider) {
   if (slider.checked) {
@@ -38,6 +42,6 @@ function load_style_sheet(path) {
   link.setAttribute('rel', 'stylesheet');
   link.setAttribute('type', 'text/css');
 
-  head.appendChild(link)
+  head.appendChild(link);
   return link;
 }

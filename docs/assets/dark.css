@@ -1,9 +1,1 @@
-@import url("//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/base16/classic-dark.min.css");
-
-html {
-  --background-color: #222129;
-  --accent-color1: #ffa86a;
-  --accent-color2: #d15700;
-  --text-color: #ffffff;
-  --border-radius: 0.3rem;
-}
+@import url("//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/base16/classic-dark.min.css");html{--background-color:#222129;--accent-color1:#ffa86a;--accent-color2:#d15700;--text-color:#ffffff;--border-radius:0.3rem;}
