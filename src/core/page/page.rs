@@ -7,7 +7,6 @@ pub struct Page {
   pub title: String,
   pub date: String,
   pub desc: String,
-  #[serde(rename = "type")]
   pub template: String,
   pub tags: Vec<String>,
   #[serde(skip_deserializing)]

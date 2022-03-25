@@ -2,7 +2,7 @@
 title: asdf
 date: 24-03-2022
 desc: asdf things
-type: _templates/post
+template: _templates/post
 tags: [asdf, things, stuff]
 ---
 
