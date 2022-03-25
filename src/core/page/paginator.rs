@@ -97,13 +97,13 @@ impl Paginator {
                 if let Ok(line) = line {
                   if first && second {
                     data.push_str(&format!("{line}\n"));
-                  } else if line == "---" {
+                  } else if line.trim() == "---" {
                     if !first {
                       first = true;
                     } else {
                       second = true;
                     }
-                  } else if line.is_empty() && !first {
+                  } else if !line.trim().is_empty() && !first {
                     break; // TODO: error
                   } else {
                     page_str.push_str(&format!("{line}\n"));
