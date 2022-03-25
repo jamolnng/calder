@@ -16,6 +16,25 @@ Adipiscing diam donec adipiscing tristique. Ipsum dolor sit amet consectetur adi
 
 Sagittis orci a scelerisque purus semper eget duis. Integer feugiat scelerisque varius morbi enim nunc faucibus. Neque sodales ut etiam sit amet nisl. Malesuada proin libero nunc consequat. Nisl suscipit adipiscing bibendum est ultricies integer quis auctor elit. Nam libero justo laoreet sit amet cursus sit amet dictum. Velit dignissim sodales ut eu sem. At lectus urna duis convallis convallis tellus. Viverra justo nec ultrices dui sapien eget. Viverra ipsum nunc aliquet bibendum enim.
 
-Non odio euismod lacinia at quis risus. Volutpat maecenas volutpat blandit aliquam etiam erat velit scelerisque. Nunc scelerisque viverra mauris in aliquam sem fringilla. Gravida arcu ac tortor dignissim convallis. Amet facilisis magna etiam tempor. Quis auctor elit sed vulputate mi sit. Donec ac odio tempor orci dapibus ultrices in iaculis. Vel turpis nunc eget lorem dolor sed viverra ipsum nunc. Quam lacus suspendisse faucibus interdum posuere lorem ipsum dolor. Cras pulvinar mattis nunc sed blandit libero volutpat. Donec ultrices tincidunt arcu non sodales neque sodales. Eu sem integer vitae justo eget magna fermentum iaculis eu. Porttitor leo a diam sollicitudin tempor id eu nisl nunc. Morbi tincidunt augue interdum velit euismod in pellentesque massa placerat. Egestas erat imperdiet sed euismod.
+```rust
+use rocket::Rocket;
 
-Id aliquet risus feugiat in ante metus dictum at tempor. Eget mi proin sed libero enim sed faucibus turpis in. Et malesuada fames ac turpis egestas maecenas pharetra. Morbi leo urna molestie at elementum eu facilisis. Morbi tincidunt ornare massa eget egestas purus viverra. Non quam lacus suspendisse faucibus interdum posuere lorem ipsum dolor. Nisl suscipit adipiscing bibendum est ultricies integer quis auctor. Orci sagittis eu volutpat odio facilisis mauris sit. Mattis enim ut tellus elementum sagittis vitae. Vitae congue mauris rhoncus aenean vel. Id eu nisl nunc mi ipsum faucibus vitae aliquet. Diam vulputate ut pharetra sit amet aliquam id diam. Lorem ipsum dolor sit amet consectetur adipiscing. Lacinia at quis risus sed vulputate odio. Enim sed faucibus turpis in. Massa ultricies mi quis hendrerit dolor magna. Mauris in aliquam sem fringilla ut morbi tincidunt augue interdum. Et leo duis ut diam. Dictumst quisque sagittis purus sit amet.
+pub fn host(output: &std::path::PathBuf) -> std::result::Result<(), ()> {
+  let t = tokio::runtime::Builder::new_multi_thread()
+    .enable_all()
+    .build()
+    .unwrap()
+    .block_on(async {
+      Rocket::build()
+        .mount("/", rocket::fs::FileServer::from(output))
+        .ignite()
+        .await?
+        .launch()
+        .await
+    });
+  match t {
+    Ok(_) => Ok(()),
+    Err(_) => Err(()),
+  }
+}
+```

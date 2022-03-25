@@ -1,3 +1,5 @@
+@import url("//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/base16/classic-light.min.css");
+
 html {
   --background-color: #dfdfdf;
   --accent-color1: #ffa86a;
