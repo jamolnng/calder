@@ -14,7 +14,7 @@ pub struct Page {
   pub build_date: String,
   #[serde(skip_deserializing)]
   pub path: String,
-  #[serde(skip_serializing, skip_deserializing)]
+  #[serde(skip_deserializing)]
   pub data: String,
 }
 
@@ -79,8 +79,8 @@ impl Page {
       "posts",
       &crate::core::page::Paginator::get_type_from(pages, "_templates/post"),
     );
-    context.insert("data", &self.data);
     context.insert("url", &"http://127.0.0.1:8000");
+    context.insert("self", &self);
 
     let mut template = self.template.clone();
     if !self.template.ends_with(".html") {
