@@ -2,9 +2,9 @@ use crate::core::page::{paginator, Paginator};
 use std::path::PathBuf;
 use tera::Tera;
 
-pub fn build(base: &PathBuf) -> paginator::Result<()> {
+pub fn build(input: &PathBuf, output: &PathBuf) -> paginator::Result<()> {
   let mut tera = match Tera::new(
-    format!("{}/_templates/**/*.html", base.display()).as_str(),
+    format!("{}/_templates/**/*.html", input.display()).as_str(),
   ) {
     Ok(t) => t,
     Err(e) => {
@@ -14,7 +14,7 @@ pub fn build(base: &PathBuf) -> paginator::Result<()> {
   };
   tera.autoescape_on(vec![]);
 
-  let mut pages = Paginator::from(base);
+  let mut pages = Paginator::from(input);
   pages.render(&tera)?;
-  pages.write(&PathBuf::from("output/"))
+  pages.write(output)
 }

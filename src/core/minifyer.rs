@@ -1,8 +1,8 @@
 use glob::glob;
 use html_minifier::HTMLMinifier;
 
-pub fn minify() -> std::result::Result<(), ()> {
-  let files = glob("output/**/*.css").ok();
+pub fn minify(output: &std::path::PathBuf) -> std::result::Result<(), ()> {
+  let files = glob(&format!("{}/**/*.css", output.display())).ok();
   if let Some(files) = files {
     for file in files {
       match file {
@@ -25,7 +25,7 @@ pub fn minify() -> std::result::Result<(), ()> {
       }
     }
   }
-  let files = glob("output/**/*.js").ok();
+  let files = glob(&format!("{}/**/*.js", output.display())).ok();
   if let Some(files) = files {
     for file in files {
       match file {
@@ -48,7 +48,7 @@ pub fn minify() -> std::result::Result<(), ()> {
       }
     }
   }
-  let files = glob("output/**/*.html").ok();
+  let files = glob(&format!("{}/**/*.html", output.display())).ok();
   if let Some(files) = files {
     for file in files {
       match file {
