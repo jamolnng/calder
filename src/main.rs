@@ -16,22 +16,27 @@ fn main() {
   if build {
     println!("=====\tBuilding...\t=====");
     match core::builder::build() {
-      Ok(_) => println!("Ok"),
-      Err(_) => println!("Err"),
+      Ok(_) => println!("=====\tOk...\t\t====="),
+      Err(_) => println!("=====\tErr...\t\t====="),
     }
+  }
+  println!("=====\tCopying...\t=====");
+  match core::copy::copy() {
+    Ok(_) => println!("=====\tOk...\t\t====="),
+    Err(_) => println!("=====\tErr...\t\t====="),
   }
   if minify {
     println!("=====\tMinifying...\t=====");
     match core::minifyer::minify() {
-      Ok(_) => println!("Ok"),
-      Err(_) => println!("Err"),
+      Ok(_) => println!("=====\tOk...\t\t====="),
+      Err(_) => println!("=====\tErr...\t\t====="),
     }
   }
   if host {
     println!("=====\tHosting...\t=====");
     match core::hoster::host() {
-      Ok(_) => println!("Ok"),
-      Err(_) => println!("Err"),
+      Ok(_) => println!("=====\tOk...\t\t====="),
+      Err(_) => println!("=====\tErr...\t\t====="),
     }
   }
 }

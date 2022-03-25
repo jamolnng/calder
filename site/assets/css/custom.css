@@ -1,0 +1,220 @@
+@import "https://fonts.googleapis.com/icon?family=Material+Icons";
+
+i {
+  vertical-align: middle !important;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+  --background-color: #1e1e1e;
+  --alternate-color1: #252525;
+  --alternate-color2: #3c3c3c;
+  --text-color: #cccccc;
+  --link-color: #007acc;
+  --accent-color: #007acc;
+  --accent-color-light: #3394D6;
+  --accent-color-dark: #0061A3;
+  --accent-text-color: #FFFFFF;
+  --border-radius: 0.3rem;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12pt !important;
+}
+
+body {
+  background: var(--alternate-color1);
+  color: var(--text-color);
+}
+
+a {
+  color: var(--link-color);
+}
+
+a:hover {
+  text-decoration: underline;
+  filter: brightness(80%);
+}
+
+.logo {
+  background-color: transparent;
+  color: var(--text-color);
+}
+
+button {
+  background-color: var(--accent-color);
+  color: var(--accent-text-color);
+  width: 80%;
+  padding-left: 8px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: large;
+  font-weight: bold;
+  border: none;
+  border-radius: var(--border-radius);
+  height: 2.3rem;
+}
+
+button:hover {
+  background-color: var(--accent-color-light);
+}
+
+button:active {
+  background-color: var(--accent-color-dark);
+}
+
+input[type=text],
+input[type=password],
+select {
+  font-size: 14pt !important;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  width: 80%;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border: none;
+  border-radius: var(--border-radius);
+  height: 2.3rem;
+}
+
+input[type=text]:focus,
+input[type=password]:focus,
+select:focus {
+  outline: 2px solid var(--alternate-color2);
+}
+
+input[type=checkbox] {
+  display: none;
+}
+
+.label-checkbox {
+  display: inline-block;
+  cursor: pointer;
+  padding-left: 25px;
+  position: relative;
+  vertical-align: top;
+}
+
+input[type=checkbox]+label:after {
+  font-family: 'Material Icons';
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: 0;
+  border: 2px solid var(--text-color);
+  border-radius: 2px;
+}
+
+input[type=checkbox]:checked+label:after {
+  content: "\E5CA";
+  color: var(--accent-text-color);
+  font-size: 16px;
+  text-align: center;
+  line-height: 16px;
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.center {
+  background-color: var(--alternate-color1);
+  margin: auto;
+  margin-top: 2rem;
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
+  width: 35%;
+  min-width: 400px;
+  max-width: 800px;
+  text-align: center;
+  padding: 10px;
+  border: none;
+  border-radius: var(--border-radius);
+}
+
+.error {
+  outline: 2px solid #F00 !important;
+}
+
+.good {
+  outline: 2px solid #0F0 !important;
+}
+
+hr {
+  width: 50%;
+  color: var(--alternate-color2);
+  background-color: var(--alternate-color2);
+}
+
+.error-str {
+  font-weight: bold;
+  font-size: 10pt;
+  text-align: left;
+  width: 80%;
+  padding-left: 20px;
+  margin: auto;
+  margin-top: 5px;
+  color: red;
+}
+
+.info-str {
+  font-weight: bold;
+  font-size: 10pt;
+  text-align: left;
+  width: 80%;
+  padding-left: 20px;
+  margin: auto;
+  margin-top: 5px;
+  color: var(--text-color);
+}
+
+.uppercase {
+  text-transform: uppercase !important;
+}
+
+.lowercase {
+  text-transform: lowercase !important;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-3px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(3px, 0, 0);
+  }
+}
+
+.apply-shake {
+  animation: shake 0.8s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}

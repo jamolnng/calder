@@ -7,7 +7,7 @@ use std::path::PathBuf;
 
 lazy_static! {
   pub static ref TEMPLATES: Tera = {
-    let mut tera = match Tera::new("site/templates/**/*") {
+    let mut tera = match Tera::new("site/_templates/**/*") {
       Ok(t) => t,
       Err(e) => {
         println!("Parsing error(s): {}", e);
@@ -52,16 +52,19 @@ fn render_markdown(file: &PathBuf, options: &Options) -> Result<String, ()> {
 }
 
 fn write_processed(file: &PathBuf, processed: &String) {
-  let mut infile = PathBuf::from(file.parent().unwrap());
-  let mut outfile = PathBuf::new();
-  while infile.file_name().unwrap() != "site" {
-    outfile = PathBuf::from(infile.file_name().unwrap()).join(outfile);
-    infile.pop();
+  let mut outfile = PathBuf::from(file.strip_prefix("site/").unwrap());
+  let outfile_string = outfile.to_string_lossy();
+  if outfile_string.starts_with("_") {
+    let start = outfile.iter().next().unwrap().to_string_lossy();
+    let t = start.trim_start_matches('_');
+    let pb = PathBuf::from(outfile.strip_prefix(start.to_string()).unwrap());
+    outfile = PathBuf::from(t).join(pb);
   }
-  outfile = PathBuf::from("output").join(outfile).join(file.file_name().unwrap()).with_extension("html");
-  println!("{}", outfile.to_string_lossy());
+  let outfile = PathBuf::from("output/").join(outfile).with_extension("html");
+  print!("{} ", outfile.to_string_lossy());
   std::fs::create_dir_all(outfile.parent().unwrap()).unwrap();
   std::fs::write(outfile, processed).unwrap();
+  println!("Ok");
 }
 
 fn process_file(file: &PathBuf, options: &Options) -> Result<String, ()> {
@@ -72,7 +75,7 @@ fn process_file(file: &PathBuf, options: &Options) -> Result<String, ()> {
   let mut context = tera::Context::new();
   context.insert("rendered", &html.as_str());
 
-  let mut template_name = format!("{}.html", dir.to_string_lossy());
+  let mut template_name = format!("{}.html", dir.to_string_lossy()).trim_start_matches('_').to_string();
 
   if TEMPLATES.get_template_names().find(|s| *s == template_name).is_none() {
     template_name = "default.html".to_string();
