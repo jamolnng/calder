@@ -1,0 +1,17 @@
+{%- extends "_templates/base.html" -%}
+{%- block title -%}Posts{%- endblock title -%}
+{%- block head -%}{{ super() }}{%- endblock head -%}
+{%- block content -%}
+Posts<br/>
+{% if posts %}
+  {% for page in posts %}
+    {% if page %}
+    <a href="/{{ page.path }}">{{ page.title }}</a><br />
+    {% else %}
+    bbbbbbbbbbbbbbbbbbbbbb
+    {% endif %}
+  {% endfor %}
+{% else %}
+  aaaaaaaaaaaaaaaaaaaaa
+{% endif %}
+{%- endblock content -%}

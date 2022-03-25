@@ -4,7 +4,7 @@ use tera::Tera;
 
 pub fn build(input: &PathBuf, output: &PathBuf) -> paginator::Result<()> {
   let mut tera = match Tera::new(
-    format!("{}/_templates/**/*.html", input.display()).as_str(),
+    format!("{}/**/*.html", input.display()).as_str(),
   ) {
     Ok(t) => t,
     Err(e) => {

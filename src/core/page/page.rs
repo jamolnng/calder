@@ -1,4 +1,3 @@
-use pulldown_cmark::{html, Options, Parser};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
@@ -13,8 +12,8 @@ pub struct Page {
   pub tags: Vec<String>,
   #[serde(skip_deserializing)]
   pub build_date: String,
-  #[serde(skip_serializing, skip_deserializing)]
-  pub path: PathBuf,
+  #[serde(skip_deserializing)]
+  pub path: String,
   #[serde(skip_serializing, skip_deserializing)]
   pub data: String,
 }
@@ -34,7 +33,7 @@ impl Page {
   }
 
   pub fn set_path(&mut self, path: &PathBuf) {
-    self.path = path.clone();
+    self.path = path.to_string_lossy().replace("\\", "/");
   }
 
   pub fn set_data(&mut self, data: String) {
@@ -44,7 +43,6 @@ impl Page {
   pub fn render(
     &mut self, pages: &Vec<Self>, tera: &tera::Tera,
   ) -> Result<()> {
-    self.render_markdown();
     self.render_tera(pages, tera)?;
     Ok(())
   }
@@ -72,14 +70,6 @@ impl Page {
     }
   }
 
-  fn render_markdown(&mut self) {
-    let options = Options::all();
-    let parser = Parser::new_ext(&self.data, options);
-    let mut html = String::with_capacity(self.data.len());
-    html::push_html(&mut html, parser);
-    self.data = html;
-  }
-
   fn render_tera(
     &mut self, pages: &Vec<Self>, tera: &tera::Tera,
   ) -> Result<()> {
@@ -87,13 +77,17 @@ impl Page {
     context.insert("pages", &pages);
     context.insert(
       "posts",
-      &crate::core::page::Paginator::get_type_from(pages, "post"),
+      &crate::core::page::Paginator::get_type_from(pages, "_templates/post"),
     );
     context.insert("data", &self.data);
+    context.insert("url", &"http://127.0.0.1:8000");
 
-    let mut template = format!("{}.html", self.template);
+    let mut template = self.template.clone();
+    if !self.template.ends_with(".html") {
+      template = format!("{template}.html");
+    }
     if tera.get_template_names().find(|s| *s == template).is_none() {
-      template = "default.html".to_string();
+      template = "_templates/default.html".to_string();
     }
 
     let result = tera.render(&template, &context);
@@ -102,7 +96,9 @@ impl Page {
         self.data = s;
         Ok(())
       }
-      Err(_) => Err(PageError {}),
+      Err(e) => {
+        println!("{e}");
+        Err(PageError {})},
     }
   }
 }
@@ -116,7 +112,7 @@ impl Default for Page {
       template: String::new(),
       build_date: chrono::Utc::now().format("%Y-%m-%d").to_string(),
       tags: Vec::new(),
-      path: PathBuf::new(),
+      path: String::new(),
       data: String::new(),
     }
   }

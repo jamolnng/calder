@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 
 use glob::glob;
+use pulldown_cmark::{html, Options, Parser};
 use std::path::PathBuf;
 
 use crate::core::page::Page;
@@ -114,34 +115,50 @@ impl Paginator {
               if first && second {
                 let page = serde_yaml::from_str::<Page>(&page_str);
                 if let Ok(mut page) = page {
-                  page.set_path(path);
-                  page.set_data(data);
+                  page.set_path(&file.with_extension(".html"));
+                  page.set_data(Self::render_markdown(&data));
                   r.push(page);
-                } else {
-                  println!("{}, {:#?}", file.display(), page_str);
-                  // TODO: error
                 }
               } else if !first && !second {
                 let title = Self::pretty_unknown_title(&file);
                 r.push(Page {
                   title: title,
-                  path: file,
+                  path: file.to_string_lossy().replace("\\", "/"),
                   data: data,
                   ..Page::default()
                 })
               }
-            } else {
-              // TODO: error
             }
           }
-        } else {
-          // TODO: error
         }
       }
-    } else {
-      // TODO: error
+    }
+    for file in Self::get_html_files(path) {
+      if let Ok(file) = file {
+        if file.is_file() {
+          if let Ok(s) = std::fs::read_to_string(&file) {
+            let file = PathBuf::from(file.strip_prefix(path).unwrap());
+            let title = Self::pretty_unknown_title(&file);
+            r.push(Page {
+              title: title,
+              path: file.to_string_lossy().replace("\\", "/"),
+              data: s,
+              template: file.to_string_lossy().replace("\\", "/"),
+              ..Page::default()
+            })
+          }
+        }
+      }
     }
     Ok(r)
+  }
+
+  fn render_markdown(data: &String) -> String {
+    let options = Options::all();
+    let parser = Parser::new_ext(&data, options);
+    let mut html = String::with_capacity(data.len());
+    html::push_html(&mut html, parser);
+    html
   }
 
   fn pretty_unknown_title(file: &PathBuf) -> String {
@@ -164,6 +181,13 @@ impl Paginator {
       .collect::<Vec<String>>();
     v.retain(|s| !s.is_empty());
     v.join(" ")
+  }
+
+  fn get_html_files(path: &PathBuf) -> Vec<glob::GlobResult> {
+    glob(format!("{}/[!_]*/**/*.html", path.display()).as_str())
+      .unwrap()
+      .chain(glob(format!("{}/*.html", path.display()).as_str()).unwrap())
+      .collect()
   }
 
   fn get_markdown_files(path: &PathBuf) -> Option<glob::Paths> {
