@@ -34,13 +34,12 @@ h3 {
 
 .center {
   margin: auto;
-  margin-top: 2rem;
   padding-top: 2rem !important;
   padding-bottom: 2rem !important;
   width: 41%;
-  min-width: 350px;
+  min-width: 400px;
+  max-width: 800px;
   text-align: left;
-  padding: 10px;
   border: none;
   border-radius: var(--border-radius);
 }
