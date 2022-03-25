@@ -2,23 +2,37 @@
 <html>
 
 <head>
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/base16/classic-dark.min.css">
+  <link rel="stylesheet"
+        href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/base16/classic-dark.min.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
   <script>hljs.highlightAll();</script>
+  <link rel="stylesheet"
+        href="/assets/main.css">
+  <script src="/assets/main.js"></script>
   {%- block head %}
   <title>{%- block title -%}{%- endblock title -%}</title>
   {%- endblock head %}
 </head>
 
 <body>
-<div id="content">
-{% block content -%}
-{%- endblock content %}
-</div>
-<div id="footer">
-{% block footer -%}
-{%- endblock footer %}
-</div>
+  <div id="themetoggle">
+    <label class="switch">
+      <input id="themetoggle-checkbox"
+             type="checkbox"
+             onclick="theme_slider(this);">
+      <span class="slider round"></span>
+    </label>
+  </div>
+  <div class="center">
+    <div id="content">
+      {% block content -%}
+      {%- endblock content %}
+    </div>
+    <div id="footer">
+      {% block footer -%}
+      {%- endblock footer %}
+    </div>
+  </div>
 </body>
 
 </html>
