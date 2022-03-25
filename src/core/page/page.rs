@@ -61,6 +61,7 @@ impl Page {
     let parser = Parser::new_ext(&self.data, options);
     let mut html = String::with_capacity(self.data.len());
     html::push_html(&mut html, parser);
+    self.data = html;
   }
 
   fn render_tera(
