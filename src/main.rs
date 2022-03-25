@@ -28,7 +28,7 @@ fn main() {
   let host = matches.is_present("host");
   let output = match matches.is_present("output") {
     true => PathBuf::from(matches.value_of("output").unwrap()),
-    false => PathBuf::from("output/"),
+    false => PathBuf::from("output"),
   };
   let do_something = build || minify || host;
   if !do_something {
