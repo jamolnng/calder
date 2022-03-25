@@ -1,9 +1,11 @@
-@import url("//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/base16/classic-dark.min.css");
+@import url("//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/androidstudio.min.css");
 
 html {
   --background-color: #222129;
+  --background-color2: #222129;
+  --accent-color0: #ffe6d4;
   --accent-color1: #ffa86a;
-  --accent-color2: #d15700;
+  --accent-color2: #ff832a;
   --text-color: #ffffff;
   --border-radius: 0.3rem;
 }

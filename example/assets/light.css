@@ -1,9 +1,10 @@
-@import url("//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/base16/classic-light.min.css");
+@import url("//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/stackoverflow-light.min.css");
 
 html {
-  --background-color: #dfdfdf;
-  --accent-color1: #ffa86a;
-  --accent-color2: #d15700;
+  --background-color: #ffffff;
+  --accent-color0: #803500;
+  --accent-color1: #d45800;
+  --accent-color2: #ff832a;
   --text-color: #000000;
   --border-radius: 0.3rem;
 }
