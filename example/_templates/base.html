@@ -19,23 +19,35 @@
 
 <body>
   <div id="main_wrapper">
-    <div id="themetoggle">
-      <label class="switch">
-        <input id="themetoggle-checkbox"
-               type="checkbox"
-               onclick="theme_slider(this);">
-        <span class="slider round"></span>
-      </label>
+    <div id="content">
+      <div id="themetoggle">
+        <label class="switch">
+          <input id="themetoggle-checkbox"
+                 type="checkbox"
+                 onclick="theme_slider(this);">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div id="header">
+          <h3 style="display: inline-block; margin-right: 10px; margin-top:32px;">
+            <a href="/">Home</a>
+          </h3>
+          <h3 style="display: inline-block; padding-right: 10px; margin-top:32px;">
+            <a href="/todo.html">Posts</a>
+          </h3>
+      </div>
+      <h1>{{ self.title }}</h1>
+      <div id="date">Created: {{ self.date }}</div>
+      Tags:
+      {% for tag in self.tags %}
+      <span style="padding-right: 10px;"><a href="/todo.html">{{ tag }}</a></span>
+      {% endfor %}
+      {% block content -%}
+      {%- endblock content %}
     </div>
-    <div class="">
-      <div id="content">
-        {% block content -%}
-        {%- endblock content %}
-      </div>
-      <div id="footer">
-        {% block footer -%}
-        {%- endblock footer %}
-      </div>
+    <div id="footer">
+      {% block footer -%}
+      {%- endblock footer %}
     </div>
   </div>
 </body>
