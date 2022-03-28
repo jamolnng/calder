@@ -66,6 +66,7 @@ h3 {
 
 a {
   color: var(--text-color1);
+  text-decoration: none;
 }
 
 #themetoggle {

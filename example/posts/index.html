@@ -1,0 +1,15 @@
+{%- extends "_templates/base.html" -%}
+{%- block title -%}Posts{%- endblock title -%}
+{%- block head -%}{{ super() }}{%- endblock head -%}
+{%- block content -%}
+{{ super() }}
+{% for post in posts| sort(attribute="date") | reverse %}
+<a href="/{{ post.path }}">
+  <div style="padding: 5px 5px 5px 15px; margin-bottom: 10px; width: 100%; background-color: var(--background-color1);">
+    <h3>{{ post.title }}</h3>
+    <h6 style="margin-left: 20px;">{{ post.date }}</h6>
+    <p style="margin-left: 20px;">{{ post.desc }}</p>
+  </div>
+</a>
+{% endfor %}
+{%- endblock content -%}

@@ -36,12 +36,6 @@
             <a href="/posts/">Posts</a>
           </h3>
       </div>
-      <h1>{{ self.title }}</h1>
-      <div id="date">Created: {{ self.date }}</div>
-      Tags:
-      {% for tag in self.tags %}
-      <span style="padding-right: 10px;"><a href="/tags/{{ tag }}/">{{ tag }}</a></span>
-      {% endfor %}
       {% block content -%}
       {%- endblock content %}
     </div>
