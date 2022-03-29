@@ -140,3 +140,11 @@ input:checked + .slider:before {
   margin-left: auto;
   margin-right: auto;
 }
+
+.hljs-ln-line, .hljs-ln-numbers, .hljs-ln-n {
+  padding-right: 10px;
+}
+
+blockquote {
+  background: var(--background-color1);
+}
