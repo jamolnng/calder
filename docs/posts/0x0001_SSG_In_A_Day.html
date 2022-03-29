@@ -53,7 +53,8 @@ Tags:
 <li><a href="(https://rocket.rs/)">Rocket</a> for viewing results/self-hosting</li>
 </ol>
 <p>While not necessary, Rocket gives the opportunity to self-host for either production or testing before pushing to something like GitHub or Gitlab pages since they take a few minutes to propagate. actix-web could have been substituted but I found Rocket fairly easy to use with a good amount of documentation.</p>
-<p>Tera is the backbone of this project in my opinion. Super simple to use, great documentation. One of my favorite features built into this project is the ability to have markdown, using pulldown-cmark, inline with HTML using a Tera filter function:</p>
+<h3>Tera</h3>
+<p>is the backbone of this project in my opinion. Super simple to use, great documentation. One of my favorite features built into this project is the ability to have markdown, using pulldown-cmark, inline with HTML using a Tera filter function:</p>
 <pre><code class="language-rust">fn tera_markdown(
   value: &amp;Value, _: &amp;HashMap&lt;String, Value&gt;,
 ) -&gt; tera::Result&lt;Value&gt; {
@@ -79,6 +80,12 @@ tera.register_filter(&quot;markdown&quot;, tera_markdown);
 &lt;h1&gt;Hello, World!&lt;/h1&gt;
 &lt;div&gt;Some more HTML thing&lt;/div&gt;
 </code></pre>
+<h3>pulldown-cmark</h3>
+<p>…</p>
+<h3>minifier/html-minifier</h3>
+<p>…</p>
+<h3>Rocket</h3>
+<p>…</p>
 <h1>// still a work in progress</h1>
 <hr/>
 <span style="font-size:10pt">

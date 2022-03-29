@@ -32,7 +32,8 @@ I'm going to use the rest of your time to highlight the crates that contribute t
 
 While not necessary, Rocket gives the opportunity to self-host for either production or testing before pushing to something like GitHub or Gitlab pages since they take a few minutes to propagate. actix-web could have been substituted but I found Rocket fairly easy to use with a good amount of documentation.
 
-Tera is the backbone of this project in my opinion. Super simple to use, great documentation. One of my favorite features built into this project is the ability to have markdown, using pulldown-cmark, inline with HTML using a Tera filter function:
+### Tera
+is the backbone of this project in my opinion. Super simple to use, great documentation. One of my favorite features built into this project is the ability to have markdown, using pulldown-cmark, inline with HTML using a Tera filter function:
 
 ```rust
 fn tera_markdown(
@@ -65,6 +66,18 @@ yields
 <h1>Hello, World!</h1>
 <div>Some more HTML thing</div>
 ```
+
+### pulldown-cmark
+
+...
+
+### minifier/html-minifier
+
+...
+
+### Rocket
+
+...
 
 # // still a work in progress
 
