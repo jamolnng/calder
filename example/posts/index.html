@@ -4,7 +4,7 @@
 {%- block content -%}
 {{ super() }}
 {% for post in posts| sort(attribute="date") | reverse %}
-<a href="/{{ post.path }}">
+<a href="/{{ post.path | trim_end_matches(pat=".html") | urlencode }}">
   <div style="padding: 5px 5px 5px 15px; margin-bottom: 10px; width: 100%; background-color: var(--background-color1);">
     <h3>{{ post.title }}</h3>
     <h6 style="margin-left: 20px;">{{ post.date }}</h6>
