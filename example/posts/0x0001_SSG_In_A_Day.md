@@ -1,17 +1,10 @@
 ---
-title: Building a static site generator in a day
+title: Exploring Rust through crates.io
 date: 2022-03-26
-desc: Building a static site generator in a day
+desc: Building a static site generator in a day with Rocket, Tera, pulldown-cmark, and more
 template: _templates/post
-tags: ["hello-world", "post"]
+tags: ["rust"]
+img: assets/logo.svg
 ---
 
-# 1
-## 2
-### 3
-#### 4
-##### 5
-###### 6
-
- - [x] test
- - [ ] asdf
+I have recently found myself

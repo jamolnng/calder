@@ -12,3 +12,7 @@ html {
   --text-color2: #ffa86a;
   --border-radius: 0.3rem;
 }
+
+.svgcolor {
+  filter: invert(0%) sepia(0%) saturate(12%) hue-rotate(257deg) brightness(104%) contrast(104%);
+}

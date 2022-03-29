@@ -9,6 +9,7 @@ pub struct Page {
   pub desc: String,
   pub template: String,
   pub tags: Vec<String>,
+  pub img: String,
   #[serde(skip_deserializing)]
   pub build_date: String,
   #[serde(skip_deserializing)]
@@ -111,6 +112,7 @@ impl Default for Page {
       template: String::new(),
       build_date: chrono::Utc::now().format("%Y-%m-%d").to_string(),
       tags: Vec::new(),
+      img: String::new(),
       path: String::new(),
       data: String::new(),
     }
