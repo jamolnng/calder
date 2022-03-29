@@ -9,6 +9,7 @@ Tags:
 {% for tag in self.tags | sort %}
 <span style="padding-right: 10px;"><a href="/tags/{{ tag }}/">{{ tag }}</a></span>
 {% endfor %}
+<hr>
 {%- if self.data -%}
 {{- self.data -}}
 {%- endif -%}

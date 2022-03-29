@@ -6,16 +6,24 @@
 {% for post in posts| sort(attribute="date") | reverse %}
 <a href="/{{ post.path | trim_end_matches(pat=".html") | urlencode }}">
   <div style="padding: 5px 5px 5px 15px; margin-bottom: 10px; width: 100%;">
-    <span class="posts_list_image" style="width: 75px; display: inline-block;">
-      {% if post.img %}
-      <img class="svgcolor" width="100%" height="100%" style="margin: auto;" src="/{{ post.img }}" />
-      {% endif %}
-    </span>
-    <span style="display: inline-block;">
-      <h3>{{ post.title }}</h3>
-      <p style="margin-left: 20px; color: var(--text-color0); font-size: 9pt;">{{ post.date }}</p>
-      <p style="margin-left: 20px; color: var(--text-color0);">{{ post.desc }}</p>
-    </span>
+    <table>
+      <tr>
+        <td>
+          <span class="posts_list_image" style="width: 75px; display: inline-block;">
+            {% if post.img %}
+            <img class="svgcolor" width="100%" height="100%" style="margin: auto;" src="/{{ post.img }}" />
+            {% endif %}
+          </span>
+        </td>
+        <td>
+          <span style="display: inline-block;">
+            <h3>{{ post.title }}</h3>
+            <p style="margin-left: 20px; color: var(--text-color0); font-size: 9pt;">{{ post.date }}</p>
+            <p style="margin-left: 20px; color: var(--text-color0);">{{ post.desc }}</p>
+          </span>
+        </td>
+      </tr>
+    </table>
   </div>
 </a>
 <hr>
