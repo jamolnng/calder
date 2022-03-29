@@ -22,7 +22,7 @@ Makrdown files support a yaml header
 ```yaml
 ---
 title: asdf
-date: 24-03-2022
+date: 2022-03-24
 desc: asdf things
 template: _templates/post
 tags: [asdf, things, stuff]
