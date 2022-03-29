@@ -3,10 +3,12 @@
 html {
   --background-color: #222129;
   --background-color1: #34323e;
+  --background-color2: #ffffff;
   --accent-color0: #ffe6d4;
   --accent-color1: #ffa86a;
   --accent-color2: #ff832a;
   --text-color0: #ffffff;
   --text-color1: #ffa86a;
+  --text-color2: #151513;
   --border-radius: 0.3rem;
 }
