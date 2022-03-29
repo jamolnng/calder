@@ -27,31 +27,31 @@
 </h3>
 </div>
 <h1>c@lder Static Site Generator</h1>
-<h2>Building a static site generator in a day</h2>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Etiam tempor orci eu lobortis elementum. Vitae ultricies leo integer malesuada nunc vel risus commodo. Ornare quam viverra orci sagittis eu volutpat odio facilisis mauris. Eget mi proin sed libero enim. Vel fringilla est ullamcorper eget nulla facilisi. Proin libero nunc consequat interdum varius sit amet mattis vulputate. Scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam. Eu facilisis sed odio morbi. Eget lorem dolor sed viverra. Eget gravida cum sociis natoque penatibus. Rhoncus mattis rhoncus urna neque viverra justo nec ultrices dui. Nunc faucibus a pellentesque sit amet porttitor eget. Elementum integer enim neque volutpat ac tincidunt vitae semper quis. Scelerisque in dictum non consectetur a. Fusce id velit ut tortor pretium viverra suspendisse. Aliquet bibendum enim facilisis gravida neque. Vel orci porta non pulvinar neque laoreet suspendisse interdum.</p>
-<p>Adipiscing diam donec adipiscing tristique. Ipsum dolor sit amet consectetur adipiscing. Amet consectetur adipiscing elit ut aliquam purus sit. Diam quam nulla porttitor massa. Nibh cras pulvinar mattis nunc sed blandit libero volutpat. Elit ut aliquam purus sit amet. Purus sit amet luctus venenatis. Lobortis mattis aliquam faucibus purus in. Non quam lacus suspendisse faucibus interdum posuere. Nunc non blandit massa enim. In vitae turpis massa sed elementum tempus egestas. Enim neque volutpat ac tincidunt. Luctus venenatis lectus magna fringilla urna porttitor rhoncus dolor purus. Neque vitae tempus quam pellentesque. Et odio pellentesque diam volutpat commodo sed egestas egestas. Nunc lobortis mattis aliquam faucibus purus. Lacus vestibulum sed arcu non odio euismod lacinia at quis. Ac feugiat sed lectus vestibulum mattis ullamcorper.</p>
-<p>Sagittis orci a scelerisque purus semper eget duis. Integer feugiat scelerisque varius morbi enim nunc faucibus. Neque sodales ut etiam sit amet nisl. Malesuada proin libero nunc consequat. Nisl suscipit adipiscing bibendum est ultricies integer quis auctor elit. Nam libero justo laoreet sit amet cursus sit amet dictum. Velit dignissim sodales ut eu sem. At lectus urna duis convallis convallis tellus. Viverra justo nec ultrices dui sapien eget. Viverra ipsum nunc aliquet bibendum enim.</p>
-<pre><code class="language-rust">use rocket::Rocket;
+<p>Use markdown in combination with <a href="https://tera.netlify.app/">Tera</a> to generate static sites. Uses <a href="https://rocket.rs">Rocket</a> to host files after building.</p>
+<pre><code class="language-cmd">USAGE:
+    cargo run -- [OPTIONS] &lt;path&gt;
 
-pub fn host(output: &amp;std::path::PathBuf) -&gt; std::result::Result&lt;(), ()&gt; {
-  let t = tokio::runtime::Builder::new_multi_thread()
-    .enable_all()
-    .build()
-    .unwrap()
-    .block_on(async {
-      Rocket::build()
-        .mount(&quot;/&quot;, rocket::fs::FileServer::from(output))
-        .ignite()
-        .await?
-        .launch()
-        .await
-    });
-  match t {
-    Ok(_) =&gt; Ok(()),
-    Err(_) =&gt; Err(()),
-  }
-}
+ARGS:
+    &lt;path&gt;    path to generate site from
+
+OPTIONS:
+    -b, --build                 flag to generate site
+    -h, --help                  Print help information
+    -m, --minify                flag to minify the sites html, css, and js code
+    -o, --output [&lt;path&gt;...]    path to put generated files in (default &quot;output/&quot;)
+    -r, --host                  flag to host via a webserver when done
+    -V, --version               Print version information
 </code></pre>
+<p>Makrdown files support a yaml header</p>
+<pre><code class="language-yaml">---
+title: asdf
+date: 24-03-2022
+desc: asdf things
+template: _templates/post
+tags: [asdf, things, stuff]
+---
+</code></pre>
+<p>Files and folders prefixed with an underscore (ex: _templates) will not be rendered or copied over after building</p>
 </div>
 <div id="footer">
 </div>
