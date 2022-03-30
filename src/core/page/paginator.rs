@@ -2,6 +2,7 @@
 
 use glob::glob;
 use pulldown_cmark::{html, Options, Parser};
+use std::collections::HashSet;
 use std::path::PathBuf;
 
 use crate::core::page::Page;
@@ -15,17 +16,20 @@ pub type Result<T> = std::result::Result<T, PaginatorError>;
 pub struct Paginator {
   base: PathBuf,
   pages: Vec<Page>,
+  tags: Vec<Page>,
 }
 
 impl Paginator {
   pub fn from(path: &PathBuf) -> Self {
-    Self {
-      base: path.clone(),
-      pages: match Self::get_pages(path) {
-        Ok(p) => p,
-        Err(_) => Vec::new(),
-      },
+    let pages = match Self::get_pages(path) {
+      Ok(p) => p,
+      Err(_) => Vec::new(),
+    };
+    let mut tags = HashSet::new();
+    for page in &pages {
+      tags.extend(page.tags.iter().cloned());
     }
+    Self { base: path.clone(), pages: pages, tags: Self::get_tags(&tags) }
   }
 
   pub fn pages(&self) -> &Vec<Page> {
@@ -47,16 +51,16 @@ impl Paginator {
   }
 
   pub fn get_type(&self, t: &str) -> Vec<&Page> {
-    Self::get_type_from(&self.pages, t)
+    Self::get_type_from(&self.pages.iter().collect(), t)
   }
 
   pub fn get_type_from<'a>(
-    pages: &'a Vec<Page>, template: &str,
+    pages: &Vec<&'a Page>, template: &str,
   ) -> Vec<&'a Page> {
     let mut r = Vec::new();
     for page in pages {
       if page.template() == template {
-        r.push(page);
+        r.push(*page);
       }
     }
     r
@@ -64,8 +68,19 @@ impl Paginator {
 
   pub fn render(&mut self, tera: &tera::Tera) -> Result<()> {
     let pages = self.pages.clone();
+    let p = pages.iter().collect::<Vec<&Page>>();
     for page in &mut self.pages {
-      match page.render(&pages, tera) {
+      match page.render(&p, tera) {
+        Ok(_) => {}
+        Err(_) => {}
+      }
+    }
+    for tag in &mut self.tags {
+      let p = pages
+        .iter()
+        .filter(|page| page.has_tag(tag.tags.first().unwrap()))
+        .collect();
+      match tag.render(&p, tera) {
         Ok(_) => {}
         Err(_) => {}
       }
@@ -80,7 +95,29 @@ impl Paginator {
         Err(_) => {}
       }
     }
+    for page in &self.tags {
+      match page.write(path) {
+        Ok(_) => {}
+        Err(_) => {}
+      }
+    }
     Ok(())
+  }
+
+  fn get_tags(tags: &HashSet<String>) -> Vec<Page> {
+    let mut r = Vec::new();
+    for tag in tags {
+      let s = tag.to_lowercase();
+      r.push(Page {
+        title: s.clone(),
+        desc: s.clone(),
+        template: "_templates/tag.html".to_string(),
+        tags: vec![s.clone()],
+        path: format!("tags/{s}"),
+        ..Default::default()
+      })
+    }
+    r
   }
 
   fn get_pages(path: &PathBuf) -> Result<Vec<Page>> {

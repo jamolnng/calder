@@ -41,7 +41,7 @@ impl Page {
   }
 
   pub fn render(
-    &mut self, pages: &Vec<Self>, tera: &tera::Tera,
+    &mut self, pages: &Vec<&Self>, tera: &tera::Tera,
   ) -> Result<()> {
     self.render_tera(pages, tera)?;
     Ok(())
@@ -71,7 +71,7 @@ impl Page {
   }
 
   fn render_tera(
-    &mut self, pages: &Vec<Self>, tera: &tera::Tera,
+    &mut self, pages: &Vec<&Self>, tera: &tera::Tera,
   ) -> Result<()> {
     let mut context = tera::Context::new();
     context.insert("pages", &pages);
