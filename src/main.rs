@@ -6,7 +6,10 @@ use std::path::PathBuf;
 fn main() {
   let matches = command!()
     .arg(arg!([path] "path to generate site from").required(true))
-    .arg(arg!(-o --output [path] "path to put generated files in").required(false))
+    .arg(
+      arg!(-o --output [path] "path to put generated files in")
+        .required(false),
+    )
     .arg(arg!(-b --build "flag to generate site").required(false))
     .arg(
       arg!(-m --minify "flag to minify the sites html, css, and js code")
@@ -41,26 +44,38 @@ fn main() {
     println!("=====\tBuilding...\t=====");
     match core::builder::build(&input, &output) {
       Ok(_) => println!("=====\tOk...\t\t====="),
-      Err(_) => println!("=====\tErr...\t\t====="),
+      Err(e) => {
+        println!("{:#?}", e);
+        println!("=====\tErr...\t\t=====")
+      }
     }
   }
   println!("=====\tCopying...\t=====");
   match core::copy::copy(&input, &output) {
     Ok(_) => println!("=====\tOk...\t\t====="),
-    Err(_) => println!("=====\tErr...\t\t====="),
+    Err(e) => {
+      println!("{:#?}", e);
+      println!("=====\tErr...\t\t=====")
+    }
   }
   if minify {
     println!("=====\tMinifying...\t=====");
     match core::minifyer::minify(&output) {
       Ok(_) => println!("=====\tOk...\t\t====="),
-      Err(_) => println!("=====\tErr...\t\t====="),
+      Err(e) => {
+        println!("{:#?}", e);
+        println!("=====\tErr...\t\t=====")
+      }
     }
   }
   if host {
     println!("=====\tHosting...\t=====");
     match core::hoster::host(&output) {
       Ok(_) => println!("=====\tOk...\t\t====="),
-      Err(_) => println!("=====\tErr...\t\t====="),
+      Err(e) => {
+        println!("{:#?}", e);
+        println!("=====\tErr...\t\t=====")
+      }
     }
   }
 }
