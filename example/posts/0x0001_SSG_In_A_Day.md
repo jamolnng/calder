@@ -2,7 +2,7 @@
 title: "Exploring Rust through crates.io: Making static websites"
 date: 2022-03-26
 desc: Building a static website generator in a day with Rocket, Tera, pulldown-cmark, and more
-template: _templates/post
+template: _templates/post.html
 tags: [rust, rocket, tera]
 img: assets/logo.svg
 ---
