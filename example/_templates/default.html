@@ -2,7 +2,7 @@
 {%- block title -%}{{ self.title }}{%- endblock title -%}
 {%- block head -%}{{ super() }}{%- endblock head -%}
 {%- block content -%}
-{%- if self.data -%}
-{{- self.data -}}
+{%- if content -%}
+{{- content -}}
 {%- endif -%}
 {%- endblock content -%}

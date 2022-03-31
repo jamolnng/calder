@@ -3,7 +3,7 @@
 {%- block head -%}{{ super() }}{%- endblock head -%}
 {%- block content -%}
 {{ super() }}
-{% for post in posts| sort(attribute="date") | reverse %}
+{% for post in site.posts | sort(attribute="date") | reverse %}
 <a href="/{{ post.path | trim_end_matches(pat=".html") | urlencode }}">
   <div style="padding: 5px 5px 5px 15px; margin-bottom: 10px; width: 100%;">
     <table>

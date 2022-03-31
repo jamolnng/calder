@@ -10,8 +10,8 @@ Tags:
 <span style="padding-right: 10px;"><a href="/tags/{{ tag | urlencode_strict }}">{{ tag }}</a></span>
 {% endfor %}
 <hr>
-{%- if self.data -%}
-{{- self.data -}}
+{%- if content -%}
+{{- content -}}
 {%- endif -%}
 {%- endblock content -%}
 {%- block footer -%}
