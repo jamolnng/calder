@@ -139,6 +139,10 @@ impl Page {
     &self.info.template
   }
 
+  pub fn path(&self) -> &String {
+    &self.info.path
+  }
+
   pub fn render(
     &mut self, tera: &tera::Tera, mut context: &mut tera::Context,
   ) -> Result<()> {
@@ -191,5 +195,34 @@ impl Page {
     std::fs::create_dir_all(parent)?;
     std::fs::write(path, content)?;
     Ok(())
+  }
+}
+
+#[derive(Debug)]
+pub struct TagPage {
+  pub tag: Tag,
+  pub page: Page,
+  pub tagged: Vec<PageInfo>,
+}
+
+use std::borrow::Cow;
+
+impl TagPage {
+  pub fn path(&self) -> &String {
+    &self.page.info.path
+  }
+
+  pub fn render(
+    &mut self, tera: &tera::Tera, context: &mut tera::Context,
+  ) -> Result<()> {
+    self.page.render(tera, context)
+  }
+
+  pub fn write(&self, base: &PathBuf) -> Result<()> {
+    self.page.write(base)
+  }
+
+  pub fn tagged(&self) -> Cow<Vec<PageInfo>> {
+    Cow::Borrowed(&self.tagged)
   }
 }

@@ -6,7 +6,9 @@ use std::path::PathBuf;
 
 use tera::{to_value, Tera, Value};
 
-use super::page::{ContentType, Page, PageContent, PageError, PageInfo, Tag};
+use super::page::{
+  ContentType, Page, PageContent, PageError, PageInfo, Tag, TagPage,
+};
 
 #[derive(Debug)]
 pub enum PaginatorErrorKind {
@@ -79,7 +81,7 @@ pub struct Site<'a> {
 pub struct Paginator {
   base: PathBuf,
   pages: Vec<Page>,
-  tag_pages: Vec<(Tag, Page, Vec<PageInfo>)>,
+  tag_pages: Vec<TagPage>,
   tags: BTreeSet<Tag>,
   tera: tera::Tera,
 }
@@ -111,7 +113,7 @@ impl Paginator {
       .pages
       .iter_mut()
       .map(|page| {
-        print!("Building: {}... ", page.info.path);
+        print!("Building: {}... ", page.path());
         let r = page.render(&self.tera, &mut context);
         match r {
           Ok(_) => println!("ok"),
@@ -121,15 +123,16 @@ impl Paginator {
       })
       .collect::<super::page::Result<Vec<()>>>()?;
 
+    let mut context = tera::Context::new();
+    let ebtree = BTreeSet::new();
     self
       .tag_pages
       .iter_mut()
-      .map(|page| {
-        let site = Site { posts: &page.2, tags: &BTreeSet::new() };
-        let mut context = tera::Context::new();
+      .map(|tp| {
+        let site = Site { posts: &tp.tagged(), tags: &ebtree };
         context.insert("site", &site);
-        print!("Building: {}... ", page.1.info.path);
-        let r = page.1.render(&self.tera, &mut context);
+        print!("Building: {}... ", tp.path());
+        let r = tp.render(&self.tera, &mut context);
         match r {
           Ok(_) => println!("ok"),
           Err(_) => println!("err"),
@@ -146,7 +149,7 @@ impl Paginator {
       .map(|page| {
         print!(
           "Writing: {}... ",
-          base.join(&page.info.path).with_extension("html").display()
+          base.join(&page.path()).with_extension("html").display()
         );
         let r = page.write(base);
         match r {
@@ -160,12 +163,12 @@ impl Paginator {
     self
       .tag_pages
       .iter()
-      .map(|page| {
+      .map(|tp| {
         print!(
           "Writing: {}... ",
-          base.join(&page.1.info.path).with_extension("html").display()
+          base.join(&tp.path()).with_extension("html").display()
         );
-        let r = page.1.write(base);
+        let r = tp.write(base);
         match r {
           Ok(_) => println!("ok"),
           Err(_) => println!("err"),
@@ -199,7 +202,7 @@ impl Paginator {
 
   fn get_tag_pages<'b>(
     pages: Vec<PageInfo>, tags: &BTreeSet<Tag>,
-  ) -> Vec<(Tag, Page, Vec<PageInfo>)> {
+  ) -> Vec<TagPage> {
     tags
       .iter()
       .map(|tag| {
@@ -216,7 +219,7 @@ impl Paginator {
         };
         let ps =
           pages.iter().filter(|p| p.tags.contains(tag)).cloned().collect();
-        (tag.clone(), Page { info, content }, ps)
+        TagPage { tag: tag.clone(), page: Page { info, content }, tagged: ps }
       })
       .collect()
   }
